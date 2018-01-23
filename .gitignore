@@ -1,3 +1,4 @@
 secret.tfvars
 *.swp
 *.tfstate
+terraform-provider-ct-v0.2.0-linux-amd64
