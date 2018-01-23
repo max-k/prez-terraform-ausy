@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Terraform Introduction - HUG Sophia-Antipolis - @Ausy 2018/01/23</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      .info {
+        padding-left: 6px;
+        background-color: #ddffdd;
+        border-left: 6px solid #4CAF50;
+      }
+      .note {
+        padding-left: 6px;
+        background-color: #ffffcc;
+        border-left: 6px solid #ffeb3b;
+      }
+      .warning {
+        padding-left: 6px;
+        background-color: #ffdddd;
+        border-left: 6px solid #f44336;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        /*color: rgb(249, 38, 114);*/
+        color: rgb(91, 71, 233);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #777872;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layouts */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+      .left-column2 {
+        width: 40%;
+        height: 92%;
+        float: left;
+      }
+      .right-column2 {
+        width: 55%;
+        float: right;
+        padding-top: 1em;
+      }
+      img[alt=TerraformTitleLogo] { margin-right: 20px; width: 420px; }
+      img[alt=AusyLogo] { margin-bottom: 20px; width: 280px; }
+      img[alt=HashicorpTools] { width: 750px; }
+      img[alt=TerraformLogo] { width: 750px; }
+      img[alt=TerraformVertical] { margin-top: 30px; width: 250px; }
+      img[alt=TerraformVertical2] { margin-top: 16px; width: 250px; }
+      img[alt=Screenshot] { width: 750px; }
+      img[alt=Plan] { width: 750px; }
+      img[alt=Plan1] { width: 750px; }
+      img[alt=Plan2] { width: 750px; }
+      img[alt=Providers] { width: 750px; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+name: centered
+layout: true
+class: center, middle
+---
+name: inverse
+layout: true
+class: center, middle, inverse
+---
+# Terraform Introduction
+![TerraformTitleLogo](images/logo-hashicorp-3f10732f.svg)
+![AusyLogo](images/Logo_Ausy.png)
+### by [Thomas Sarboni](mailto:max-k@post.com)
+.footnote[[Sophia-Antipolis HUG](https://www.meetup.com/fr-FR/Sophia-Antipolis-HashiCorp-User-Group)<br />.red[@] [Ausy](http://www.ausy.fr) 2018]
+---
+# Quick Reminder about Hashicorp Tools
+![HashicorpTools](images/provsion-secure-run-hashicorp.jpg)
+.right[[source](http://discoposse.com/category/uncategorized/?print=print-search)]
+---
+# What Is Terraform?
+---
+## What better than a picture?
+![TerraformLogo](images/hashicorp-logo.png)
+.right[[source](http://thewatchmakers.fr/terraform-introduction-infra-as-code/)]
+---
+layout: false
+# What Is Terraform?
+.left-column2[
+![TerraformVertical2](images/terraform_verticallogo_fullcolor.svg)
+.right[[source](https://docs.microsoft.com/fr-fr/azure/terraform/)]
+]
+.right-column2[
+## * Infrastructure As Code
+## * Execution Plans
+## * Resource Graph
+## * Change Automation
+]
+---
+# Terraform Use Cases
+.left-column2[
+![TerraformVertical2](images/terraform_verticallogo_fullcolor.svg)
+.right[[source](https://docs.microsoft.com/fr-fr/azure/terraform/)]
+## * Software Demos
+## * Resources Schedulers
+]
+.right-column2[
+## * Multi-Tier Applications
+## * Self-Service Clusters
+## * Disposable Environments
+## * Software Defined Networking
+## * Multi-Cloud Deployments
+]
+---
+layout: true
+template: inverse
+---
+# What better than a practice?
+---
+# Quick Start Guide With AWS
+## This example has been freely adapted from [Terraform documentation](https://www.terraform.io/intro/index.html) and [Terraform Quick Start Guide](https://www.terraform.io/intro/getting-started/install.html).
+
+## Feel free to take a look at them.
+---
+# First step: Build a simple infrastructure.
+---
+layout: false
+# Quick Start Guide: 1. Build
+
+## AWS configuration
+
+AWS configuration is generated using `aws-cli`.
+
+```.bash
+$ aws configure
+AWS Access Key ID [None]: ACCESS_KEY_ID
+AWS Secret Access Key [None]: SECRET_ACCESS_KEY
+Default region name [None]: eu-west-1
+Default output format [None]: json
+```
+
+Configuration is stored in ~/.aws directory.
+
+```.bash
+$ cat ~/.aws/config 
+[default]
+region = eu-west-1
+output = json
+
+$ cat ~/.aws/credentials
+[default]
+aws_access_key_id = ACCESS_KEY_ID
+aws_secret_access_key = SECRET_ACCESS_KEY
+```
+---
+# Quick Start Guide: 1. Build
+
+## Terraform basic configuration
+
+.note[All *.tf files present in the current directory will be evaluated by Terraform.]
+
+.warning[If you use a region other than eu-west-1 then you will need to choose an AMI in that region as AMI IDs are region specific.]
+
+```.bash
+$ cat > example1/example1.tf << 'EOF'
+provider "aws" {
+  # access_key = ""
+  # secret_key = ""
+  region     = "eu-west-1"
+}
+resource "aws_instance" "example" {
+  ami           = "ami-db1688a2"
+  instance_type = "t2.micro"
+}
+EOF
+```
+
+Take a look at [providers reference](https://www.terraform.io/docs/providers/index.html) to see all available options.
+
+Hashicorp Configuration Language (HCL) syntax details are available [here](https://www.terraform.io/docs/configuration/syntax.html).
+---
+# Quick Start Guide: 1. Build
+
+## Terraform initialization 1/2
+
+```.bash
+$ terraform init
+
+Initializing provider plugins...
+- Checking for available provider plugins on https://releases.hashicorp.com...
+- Downloading plugin for provider "aws" (1.7.1)...
+
+The following providers do not have any version constraints in configuration,
+so the latest version was installed.
+
+To prevent automatic upgrades to new major versions that may contain breaking
+changes, it is recommended to add version = "..." constraints to the
+corresponding provider blocks in configuration, with the constraint strings
+suggested below.
+
+* provider.aws: version = "~> 1.7"
+
+Terraform has been successfully initialized!
+```
+.note[As you can see, setting a version for provider is recommended.]
+---
+# Quick Start Guide: 1. Build
+
+## Terraform initialization 2/2
+
+```.bash
+$ sed -i 's/\(region.*$\)/\1\n  version = "~> 1.7"/' example1.tf
+$ head -n6 example1.tf | grep -v '#'
+provider "aws" {
+  region     = "eu-west-1"
+  version    = "~> 1.7"
+}
+
+$ terraform init
+
+Initializing provider plugins...
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+```
+---
+# Quick Start Guide: 1. Build
+
+## Applying changes 1/2
+
+```.bash
+$ terraform apply
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  + aws_instance.example
+      ami:                          "ami-db1688a2"
+      instance_type:                "t2.micro"
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+```
+.note[Output has been truncated to save space.]
+---
+# Quick Start Guide: 1. Build
+
+## Applying changes 2/2
+
+```.bash
+  Enter a value: yes
+
+aws_instance.example: Creating...
+  ami:                          "" => "ami-db1688a2"
+  instance_type:                "" => "t2.micro"
+aws_instance.example: Still creating... (10s elapsed)
+aws_instance.example: Still creating... (20s elapsed)
+aws_instance.example: Still creating... (30s elapsed)
+aws_instance.example: Creation complete after 35s (ID: i-07fc4b8418ff5f99b)
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
+Deployment takes some time because Terraform wait for EC2 instance to start.
+
+.note[Output has been truncated to save space.]
+---
+# Quick Start Guide: 1. Build
+
+## Displaying current status
+
+Current state has been saved to terraform.tfstate file.
+
+```.bash
+$ ls
+example1.tf  terraform.tfstate
+```
+
+```.bash
+$ terraform show
+aws_instance.example:
+  id = i-07fc4b8418ff5f99b
+  ami = ami-db1688a2
+  associate_public_ip_address = true
+  availability_zone = eu-west-1a
+  instance_state = running
+  instance_type = t2.micro
+  private_dns = ip-172-31-2-55.eu-west-1.compute.internal
+  private_ip = 172.31.2.55
+  public_dns = ec2-34-248-206-197.eu-west-1.compute.amazonaws.com
+  public_ip = 34.248.206.197
+```
+.note[Output has been truncated to save space.]
+---
+# Quick Start Guide: 1. Build
+ 
+## Checking AWS Console
+
+![Screenshot](images/Screenshot.png)
+
+We can see that our instance has been automatically created and is up and running.
+---
+template: inverse
+# Second step: Manage changes
+---
+template: inverse
+# The Plan: A Terraform Strength
+![Plan](images/plan.png)
+.right[[source](https://hackernoon.com/building-a-static-website-generator-with-react-and-terraform-823be0b24b12)]
+---
+# Quick Start Guide: 2. Change
+
+## Changing AMI ID
+
+Here, we switched from Amazon Linux 2 to Ubuntu 16.04.
+
+```.bash
+$ sed -i 's/ami-db1688a2/ami-4d46d534/' example1.tf
+$ tail -n4 example1.tf
+resource "aws_instance" "example" {
+  ami           = "ami-4d46d534"
+  instance_type = "t2.micro"
+}
+```
+---
+# Quick Start Guide: 2. Change
+
+## Checking the plan
+```.bash
+$ terraform plan
+Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+
+aws_instance.example: Refreshing state... (ID: i-07fc4b8418ff5f99b)
+
+------------------------------------------------------------------------
+
+An execution plan has been generated and is shown below.
+
+Terraform will perform the following actions:
+
+-/+ aws_instance.example (new resource required)
+      id:                           "i-07fc4b8418ff5f99b" => <computed> (forces new resource)
+      ami:                          "ami-db1688a2" => "ami-4d46d534" (forces new resource)
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+```
+.note[Output has been truncated to save space.]
+---
+# Quick Start Guide: 2. Change
+
+## Updating our infrastructure
+
+```.bash
+$ terraform apply -auto-approve
+aws_instance.example: Refreshing state... (ID: i-07fc4b8418ff5f99b)
+aws_instance.example: Destroying... (ID: i-07fc4b8418ff5f99b)
+aws_instance.example: Still destroying... (ID: i-07fc4b8418ff5f99b, 10s elapsed)
+aws_instance.example: Still destroying... (ID: i-07fc4b8418ff5f99b, 20s elapsed)
+aws_instance.example: Still destroying... (ID: i-07fc4b8418ff5f99b, 30s elapsed)
+aws_instance.example: Still destroying... (ID: i-07fc4b8418ff5f99b, 40s elapsed)
+aws_instance.example: Still destroying... (ID: i-07fc4b8418ff5f99b, 50s elapsed)
+aws_instance.example: Still destroying... (ID: i-07fc4b8418ff5f99b, 1m0s elapsed)
+aws_instance.example: Destruction complete after 1m2s
+aws_instance.example: Creating...
+  ami:                          "" => "ami-4d46d534"
+  instance_type:                "" => "t2.micro"
+aws_instance.example: Still creating... (10s elapsed)
+aws_instance.example: Still creating... (20s elapsed)
+aws_instance.example: Creation complete after 25s (ID: i-05b158f584400e831)
+
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+```
+.note[Output has been truncated to save space.]
+---
+template: centered
+# Change workflows
+![Plan1](images/master-flow.png)
+.right[[source](https://atlantis.run/blog/atlantis-release/)]
+![Plan2](images/pull-request-flow.png)
+.right[[source](https://atlantis.run/blog/atlantis-release/)]
+---
+template: inverse
+# Third step: Destroy our infrastructure
+---
+# Quick Start Guide: 3. Destroy
+
+## Destroying our infrastructure
+
+```.bash
+$ terraform destroy -force
+aws_instance.example: Refreshing state... (ID: i-05b158f584400e831)
+aws_instance.example: Destroying... (ID: i-05b158f584400e831)
+aws_instance.example: Still destroying... (ID: i-05b158f584400e831, 10s elapsed)
+aws_instance.example: Still destroying... (ID: i-05b158f584400e831, 20s elapsed)
+aws_instance.example: Still destroying... (ID: i-05b158f584400e831, 30s elapsed)
+aws_instance.example: Still destroying... (ID: i-05b158f584400e831, 40s elapsed)
+aws_instance.example: Still destroying... (ID: i-05b158f584400e831, 50s elapsed)
+aws_instance.example: Destruction complete after 52s
+
+Destroy complete! Resources: 1 destroyed.
+```
+---
+template: inverse
+# Fourth step: Manage dependencies
+---
+# Quick Start Guide: 4. Dependencies
+
+## Implicit dependency 1/2
+
+Let's add an Elastic IP to our configuration.
+
+```.bash
+$ cat >> example1.tf << 'EOF'
+resource "aws_eip" "ip" {
+  instance = "${aws_instance.example.id}"
+}
+EOF
+```
+
+By inferring on id of our EC2 instance, we create an implicit dependency.
+---
+# Quick Start Guide: 4. Dependencies
+
+## Implicit dependency 2/2
+
+Terraform automatically detects there is an implicit dependency.
+
+```.bash
+$ terraform apply -auto-approve
+aws_instance.example: Creating...
+  ami:                          "" => "ami-4d46d534"
+  instance_type:                "" => "t2.micro"
+aws_instance.example: Still creating... (10s elapsed)
+aws_instance.example: Still creating... (20s elapsed)
+aws_instance.example: Creation complete after 24s (ID: i-0f7c11fbccde6d669)
+aws_eip.ip: Creating...
+  instance:          "" => "i-0f7c11fbccde6d669"
+aws_eip.ip: Creation complete after 1s (ID: eipalloc-2c933511)
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+```
+.note[Output has been truncated to save space.]
+
+Here, we can see that EC2 instance has been created before Elastic IP.
+---
+# Quick Start Guide: 4. Dependencies
+
+## Explicit dependency
+
+If Terraform can't detect dependencies we have to use `depends_on`.
+
+```.bash
+# New resource for the S3 bucket our application will use.
+resource "aws_s3_bucket" "example" {
+  # NOTE: S3 bucket names must be unique across _all_ AWS accounts, so
+  # this name must be changed before applying this example to avoid naming
+  # conflicts.
+  bucket = "ausy-terraform-getting-started-guide"
+  acl    = "private"
+}
+# Change the aws_instance we declared earlier to now include "depends_on"
+resource "aws_instance" "example" {
+  ami           = "ami-4d46d534"
+  instance_type = "t2.micro"
+  depends_on = ["aws_s3_bucket.example"]
+}
+```
+---
+# Quick Start Guide: 4. Dependencies
+
+## Non dependent resources 1/2
+
+Non-dependent resources deployment can be parallelized.
+
+```.bash
+$ cat >> example1.tf << 'EOF'
+resource "aws_instance" "another" {
+  ami           = "ami-4d46d534"
+  instance_type = "t2.micro"
+}
+EOF
+$ terraform destroy -force >/dev/null 2>&1
+```
+---
+# Quick Start Guide: 4. Dependencies
+
+## Non dependent resources 2/2
+
+```.bash
+$ terraform apply -auto-approve
+aws_instance.another: Creating...
+aws_s3_bucket.example: Creating...
+aws_s3_bucket.example: Creation complete after 7s (ID: ausy-terraform-getting-started-guide)
+aws_instance.example: Creating..
+aws_instance.another: Still creating... (10s elapsed)
+aws_instance.example: Still creating... (10s elapsed)
+aws_instance.another: Still creating... (20s elapsed)
+aws_instance.another: Creation complete after 25s (ID: i-0acf2b54d18d1338a)
+aws_instance.example: Still creating... (20s elapsed)
+aws_instance.example: Creation complete after 25s (ID: i-05b9a3c56ed2de02a)
+aws_eip.ip: Creating...
+aws_eip.ip: Creation complete after 2s (ID: eipalloc-ed9d3bd0)
+
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
+```
+.note[Output has been truncated to save space.]
+---
+template: inverse
+# Fifth step: Provisioners
+---
+# Quick Start Guide: 5. Provisioners
+
+## Defining a provisionner
+
+.note[A provisionner is only run once when its resource is created.]
+
+```.bash
+$ cat > example1.tf << 'EOF'
+provider "aws" {
+  region     = "eu-west-1"
+}
+resource "aws_instance" "example" {
+  ami           = "ami-4d46d534"
+  instance_type = "t2.micro"
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.example.public_ip} > ip_address.txt"
+  }
+}
+EOF
+```
+This provisioner executes a command locally on the machine.
+---
+# Quick Start Guide: 5. Provisioners
+
+## Running a provisionner
+
+```.bash
+$ terraform apply
+aws_instance.example: Creating...
+  ami:                          "" => "ami-4d46d534"
+  instance_type:                "" => "t2.micro"
+aws_instance.example: Still creating... (10s elapsed)
+aws_instance.example: Still creating... (20s elapsed)
+aws_instance.example: Provisioning with 'local-exec'...
+aws_instance.example (local-exec): Executing: ["/bin/sh" "-c" "echo 34.244.0.106 > ip_address.txt"]
+aws_instance.example: Creation complete after 25s (ID: i-06b26219dca2370ca)
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
+.note[Output has been truncated to save space.]
+```.bash
+$ cat ip_address.txt
+34.244.0.106
+```
+---
+# Quick Start Guide: 5. Provisioners
+
+## Failed provisionners and tainted resources 1/2
+
+If a resource successfully creates but fails during provisioning, Terraform will error and mark the resource as "tainted."
+
+```.bash
+$ sed -i 's#\(ip_address.txt\)#output/\1#' example1.tf
+$ terraform apply -auto-approve
+aws_instance.example: Creating...
+  ami:                          "" => "ami-4d46d534"
+  instance_type:                "" => "t2.micro"
+aws_instance.example: Still creating... (10s elapsed)
+aws_instance.example: Provisioning with 'local-exec'...
+aws_instance.example (local-exec): Executing: ["/bin/sh" "-c" "echo 34.240.178.146 > output/ip_address.txt"]
+aws_instance.example (local-exec): /bin/sh: output/ip_address.txt: Aucun fichier ou dossier de ce type
+
+Error: Error applying plan
+```
+.note[Output has been truncated to save space.]
+---
+# Quick Start Guide: 5. Provisioners
+
+## Failed provisionners and tainted resources 2/2
+
+```.bash
+$ terraform show
+aws_instance.example: (tainted)
+  id = i-07ab8a80ea833349e
+  ami = ami-4d46d534
+```
+.note[Output has been truncated to save space.]
+
+.warning[A tainted resource can't be updated.
+
+If you run `terraform apply` once more It will be destroyed and re-created.]
+
+## Destroy provisionners
+
+Provisionners can also be configured to be run at destroy time.
+
+But, for many resources, built-in clenup mechanisms are recommended.
+---
+template: inverse
+# Sixth step: Input Variables
+---
+# Quick Start Guide: 6. Input Variables
+
+## Defining variables
+
+.note[File name doesn't matter because Terraform loads all *.tf files.]
+
+.note[Variables without default values are mandatory.]
+
+```.bash
+$ cat > variables.tf << 'EOF'
+variable "aws_access_key_id" {}
+variable "aws_secret_access_key" {}
+variable "region" {
+  default = "eu-west-1"
+}
+EOF
+```
+---
+# Quick Start Guide: 6. Input Variables
+
+## Using variables in configuration
+```.bash
+$ cat > example1.tf << 'EOF'
+provider "aws" {
+  access_key = "${var.aws_access_key_id}"
+  secret_key = "${var.aws_secret_access_key}"
+  region     = "${var.region}"
+}
+resource "aws_instance" "example" {
+  ami           = "ami-4d46d534"
+  instance_type = "t2.micro"
+}
+EOF
+```
+.warning[If you try too call `terraform apply` now, it will ask for your credentials.]
+---
+# Quick Start Guide: 6. Input Variables
+
+## Assigning Variables
+
+The more convenient way to set credentials is to use a variables file.
+```.bash
+$ cat > secret.tfvars << 'EOF'
+aws_access_key_id = "ACCESS_KEY_ID"
+aws_secret_access_key = "SECRET_ACCESS_KEY"
+EOF
+```
+But you can also reuse aws global configuration.
+```.bash
+$ sed '/\[.*\]/d' ~/.aws/credentials > secret.tfvars
+$ sed -i 's/ = \(.*\)$/ = "\1"/' secret.tfvars
+```
+Then you can deploy using `var-file` parameter.
+```.bash
+$ terraform apply -var-file=secret.tfvars --auto-approve
+$ terraform destroy -var-file=secret.tfvars -force
+```
+---
+# Quick Start Guide: 6. Input Variables
+
+## Other ways to assign variables
+
+### Using -var command-line flag
+```.bash
+$ terraform apply -var "variable=value"
+```
+### Using environment variables
+```.bash
+$ TF_VAR_variable="value" terraform apply
+```
+### Using UI input
+```.bash
+$ terraform apply --auto-approve
+var.aws_access_key_id
+  Enter a value:
+```
+---
+# Quick Start Guide: 6. Input Variables
+
+## Lists and maps
+
+
+---
+template: inverse
+# Seventh step: Output Variables
+---
+# Quick Start Guide: 7. Output Variables
+
+## Defining outputs
+
+```.bash
+$ cat >> example1.tf << 'EOF'
+resource "aws_eip" "ip" {
+  instance = "${aws_instance.example.id}"
+}
+output "ip" {
+  value = "${aws_eip.ip.public_ip}"
+}
+EOF
+```
+---
+# Quick Start Guide: 7. Output Variables
+
+## Viewing outputs
+```.bash
+$ terraform apply -var-file=secret.tfvars --auto-approve
+[...]
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+ip = 34.243.121.5
+```
+.note[Output has been truncated to save space.]
+
+It is also possible to query outputs after apply using `output` command.
+```.bash
+$ terraform output
+ip = 34.243.121.5
+$ terraform output ip
+34.243.121.5
+```
+.note[We don't need to authenticate here.]
+---
+template: inverse
+# Eighth step: Modules
+---
+# Quick Start Guide: 8. Modules
+
+## Using modules
+```.bash
+$ rm *.tfvars variables.tf
+$ cat > example1.tf << 'EOF'
+provider "aws" {
+  region     = "eu-west-1"
+}
+module "consul" {
+  source = "hashicorp/consul/aws"
+  aws_region  = "eu-west-1" # should match provider region
+  num_servers = "3"
+}
+EOF
+```
+.note[`source` is the only mandatory parameter.]
+---
+# Quick Start Guide: 8. Modules
+
+## Download module and dependencies
+```.bash
+$ terraform init
+Initializing modules...
+- module.consul
+  Found version 0.1.0 of hashicorp/consul/aws on registry.terraform.io
+  Getting source "hashicorp/consul/aws"
+- module.consul.consul_servers
+  Getting source "./modules/consul-cluster"
+- module.consul.consul_clients
+  Getting source "./modules/consul-cluster"
+- module.consul.consul_servers.security_group_rules
+  Getting source "../consul-security-group-rules"
+- module.consul.consul_servers.iam_policies
+  Getting source "../consul-iam-policies"
+- module.consul.consul_clients.security_group_rules
+  Getting source "../consul-security-group-rules"
+- module.consul.consul_clients.iam_policies
+  Getting source "../consul-iam-policies"
+
+Terraform has been successfully initialized!
+```
+.note[Output has been truncated to save space.]
+---
+template: inverse
+# Ninth step: Remote backends
+---
+# Quick Start Guide: 9. Remote Backends
+
+## Concept
+
+Terraform allow you to store the production state remotely. So it can be easily shared between members a team.
+
+A lot of backend are available (S3, Consul, Terraform Enterprise, ...).
+
+Here is an example of a configuration using Consul:
+```.bash
+
+```
+---
+template: inverse
+# Tenth step: Providers
+---
+# Providers
+![Providers](images/provider-logos.jpg)
+.footnote[[source](http://eridem.net/infrastructure-as-code-replace-custom-terminal-scripts-and-uis)]
+---
+template: inverse
+# Still Want To Go Further?
+---
+# Going further
+## Other examples from Hashicorp
+ * https://www.terraform.io/intro/examples/index.html
+## Consul And Vault on AWS : Quickstart Guides
+ * https://www.hashicorp.com/blog/consul-and-vault-on-aws-quick-start-guides
+---
+template: inverse
+# Ok, Let's Try Something Cool Now!
+---
+## Resources
+### GCP Provider
+
+ * https://www.terraform.io/docs/providers/google/index.html
+ * https://github.com/terraform-providers/terraform-provider-google
+
+### Typhoon
+
+ * https://typhoon.psdn.io/
+ * https://github.com/poseidon/typhoon
+
+### Terraform Modules Registry
+
+ * https://registry.terraform.io/
+
+### Typhoon Module
+
+ * https://registry.terraform.io/modules/poseidon/kubernetes/google/1.9.2
+ * https://github.com/poseidon/terraform-google-kubernetes
+---
+template: inverse
+# Let's Rock
+---
+# Kubernetes on GCP with Typhoon
+
+## GCP credentials download and installation
+Start by generating and downloading your creds following [this instructions](https://www.terraform.io/docs/providers/google/index.html#configuration-reference).
+
+Then, copy the file at the right place.
+```.bash
+$ mkdir ~/.config/google-cloud
+$ mv <THE_FILE_YOU_DOWNLOAD>.json ~/.config/google-cloud/terraform.json
+```
+Also `Google Compute Engine API` and `Google Cloud DNS API` must be enabled on your project.
+---
+# Kubernetes on GCP with Typhoon
+
+## terraform-ct provider installation
+
+```.bash
+$ wget https://github.com/coreos/terraform-provider-ct/releases/download/v0.2.0/terraform-provider-ct-v0.2.0-linux-amd64.tar.gz
+$ tar xzf terraform-provider-ct-v0.2.0-linux-amd64.tar.gz
+$ sudo mv terraform-provider-ct-v0.2.0-linux-amd64/terraform-provider-ct /usr/local/bin/
+$ rm -r terraform-provider-ct-v0.2.0-linux-amd64
+$ cat >> ~/.terraformrc << 'EOF'
+providers {
+  ct = "/usr/local/bin/terraform-provider-ct"
+}
+EOF
+```
+---
+# Kubernetes on GCP with Typhoon
+
+## Providers configuration 1/2
+
+.note[You must customize, at least your project ID.]
+```.bash
+$ mkdir -p infra/terraform/clusters
+$ cat > infra/terraform/clusters/providers.tf << 'EOF'
+provider "google" {
+  version = "1.2"
+  alias   = "default"
+
+  credentials = "${file("~/.config/google-cloud/terraform.json")}"
+  project     = "arched-broker-192822"
+  region      = "us-central1"
+}
+
+provider "local" {
+  version = "~> 1.0"
+  alias = "default"
+}
+EOF
+```
+
+---
+# Kubernetes on GCP with Typhoon
+
+## Providers configuration 2/2
+
+```.bash
+$ cat >> infra/terraform/clusters/providers.tf << 'EOF'
+provider "null" {
+  version = "~> 1.0"
+  alias = "default"
+}
+
+provider "template" {
+  version = "~> 1.0"
+  alias = "default"
+}
+
+provider "tls" {
+  version = "~> 1.0"
+  alias = "default"
+}
+EOF
+```
+---
+# Kubernetes on GCP with Typhoon
+
+## Configure a Kubernetes cluster 1/2
+
+.note[Here you have to customize your DNS zone.]
+```.bash
+$ cat > infra/terraform/clusters/google-cloud-yavin.tf << 'EOF'
+module "google-cloud-yavin" {
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=v1.9.2"
+
+  providers = {
+    google = "google.default"
+    local = "local.default"
+    null = "null.default"
+    template = "template.default"
+    tls = "tls.default"
+  }
+
+  # Google Cloud
+  region        = "us-central1"
+  dns_zone      = "cloud.max-k.org"
+  dns_zone_name = "cloudmax-korg"
+  os_image      = "coreos-stable-1576-5-0-v20180105"
+EOF
+```
+---
+# Kubernetes on GCP with Typhoon
+
+## Configure a Kubernetes cluster 2/2
+
+.note[Do not forget to put your iusername and SSH public key here.]
+```.bash
+$ mkdir -p /home/tsarboni/.secrets/clusters/yavin
+$ cat >> infra/terraform/clusters/google-cloud-yavin.tf << 'EOF'
+
+  cluster_name       = "yavin"
+  controller_count   = 1
+  worker_count       = 2
+  ssh_authorized_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC/oOmivyiwg8PHK61qMYiA79ESP8Zdqs9MCdctJO2PeODa91jhQ5mbIAj0ARK9oAsVEaMu+zqj05Llynsjj5RwBRHv/0Y6Yz120TOWoIO/jDHKiyz0JxUOxQg9hjmWbsuCFNW59zJGbL6UYl2XE9ZEWEroP1qzqGZ+VkkJ8try4CJod8snvxCTegaZjtM3LYUSwgQSH/QUpM64zOxhSfTKOf3F46xpPxGICvrdQqQxDA5eD131S9kywCpWH+agj50SggPsi1lC5ejNHO5jJJj7E/3p89M9D4sKpkjL8cxDap/IjoueoAVAa99newzT4wOb2kuPOXrXPb/+Sf5pWR5H9OVzxYxqdUTc+F6Kim6+yFXYClI+qFmL5N6LGxo41oO+I2sMxlrXr//IQMC0H6AT44rbHFux9bsrpZ1ZkHu9taB5KS2qbOhqP2BH+Atkxf3+aqqOCHr7quddERgWd2TQLcAOgINEh54JN3OIStWLXmvXrQNnbK0nkvG2/1lNGB4rrbSdbRpcRYyKScAljWR0FTxPrqLd8MKQFk/VukOZpr1AhoNL7PEvgHwu+wSLPcFiXOIZXmJ/ExhTDfav1fSWH5HVO4+sfd19Ed3+vKj8+JHWd9sgFEz9B+UoXedBwN3kXMF5lE6NzJGeWXUIz21EKUy8xkmGDEO8xWgRChLCHQ== tsarboni@localhost"
+
+  # output assets dir
+  asset_dir = "/home/tsarboni/.secrets/clusters/yavin"
+}
+EOF
+```
+---
+# Kubernetes on GCP with Typhoon
+
+## Download required dependencies
+```.bash
+$ terraform init
+$ terraform get
+```
+
+## Enable your ssh-agent.
+```.bash
+$ ssh-add ~/.ssh/id_rsa
+$ ssh-add -L
+```
+
+## Launch your deployment
+```.bash
+$ terraform apply
+```
+---
+template: inverse
+# More Workshops
+---
+## More Workshops 1/2
+### MIGUEL ÁNGEL DOMÍNGUEZ COLOMA @ eridem.net
+
+ * http://eridem.net/infrastructure-as-code-replace-custom-terminal-scripts-and-uis
+
+### -FR- François Villain @ thewatchmakers.fr
+
+ * https://www.terraform.io/intro/index.html
+
+### Gabriele Petronella @ buildo.io
+
+ * https://blog.buildo.io/reusable-cloudfront-configuration-with-terraform-4c1de144c735
+---
+## More Workshops 2/2
+### Yevgeniy Brikman @ gruntwork.io
+
+* https://blog.gruntwork.io/an-introduction-to-terraform-f17df9c6d180
+* https://github.com/gruntwork-io/infrastructure-as-code-training
+
+### Artem Nosulchik @ tech.smartling.com
+
+* [Getting started with Terraform and AWS EC2, first steps](https://tech.smartling.com/getting-started-with-terraform-and-aws-ec2-first-steps-workshop-1-e38607f0fd4c)
+* [EC2 Networking, Autoscaling Groups, CloudWatch](https://tech.smartling.com/aws-terraform-workshop-2-ec2-networking-autoscaling-groups-cloudwatch-12ee08c17)
+* [ELB, SNS, AutoScaling](https://tech.smartling.com/aws-terraform-workshop-3-elb-sns-autoscaling-210e2337057f)
+* [S3, IAM, Terraform remote state, Jenkins](https://tech.smartling.com/aws-terraform-workshop-4-s3-iam-terraform-remote-state-jenkins-71c0d7512bf1)
+* [Lambda Functions](https://tech.smartling.com/aws-terraform-workshop-5-aws-lambda-functions-9af79af996b7)
+* [EC2 Container Service, AWS Lambda](https://tech.smartling.com/aws-terraform-workshop-6-ec2-container-service-aws-lambda-9e60686c1f71)
+---
+name: last-page
+template: inverse
+## That's all folks (for now)!
+
+Présentation créée avec [remark](http://github.com/gnab/remark).
+
+[https://github.com/max-k/prez-terraform-ausy](https://github.com/max-k/prez-terraform-ausy)
+
+[https://max-k.github.io/prez-terraform-ausy](https://max-k.github.io/prez-terraform-ausy)
+    </textarea>
+    <script src="js/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
