@@ -782,9 +782,82 @@ var.aws_access_key_id
 ---
 # Quick Start Guide: 6. Input Variables
 
-## Lists and maps
+## Lists
 
+Lists can be defined implicitly by using brackets.
+```.bash
+variable "cidrs" { default = [] }
+```
+Or explicitly by specifying a type.
+```.bash
+variable "cidrs" { type = "list" }
+```
+You can specify lists in a terraform.tfvars file:
+```.bash
+cidrs = [ "10.0.0.0/16", "10.1.0.0/16" ]
+```
+---
+# Quick Start Guide: 6. Input Variables
 
+## Maps 1/3
+
+Maps are a way to create variables that are lookup tables.
+
+The best example to that is to dynamically set AMI ids depending on selected region.
+```.bash
+# variables.tf
+variable "region" {
+  default = "eu-west-1"
+}
+variable "amis" {
+  type = "map"
+  default = {
+    "eu-west-1" = "ami-db1688a2"
+    "eu-west-2" = "ami-6d263d09"
+  }
+}
+```
+---
+# Quick Start Guide: 6. Input Variables
+
+## Maps 2/3
+
+Then, replace the aws_instance with the following:
+```.bash
+resource "aws_instance" "example" {
+  ami           = "${lookup(var.amis, var.region)}"
+  instance_type = "t2.micro"
+}
+```
+That's all, now we support another region. 
+
+We can deploy our infra to another usgin the following command:
+```.bash
+$ terraform apply -var "region=eu-west-2"
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+  ami = ami-def456
+```
+---
+# Quick Start Guide: 6. Input Variables
+
+## Maps 3/3
+
+Like strings, maps can be set on command-line:
+```.bash
+$ terraform apply -var 'amis={ eu-west-1 = "ami-db1688a2", eu-west-2 = "ami-6d263d09" }'
+```
+.note[Even if every key will be assigned as input, the variable must be established as a map by setting its default to {}.]
+
+They can also be set in terraform.tfvars file:
+```.bash
+amis = {
+  "us-east-1" = "ami-abc123"
+  "us-west-2" = "ami-def456"
+}
+```
 ---
 template: inverse
 # Seventh step: Output Variables
@@ -887,7 +960,13 @@ A lot of backend are available (S3, Consul, Terraform Enterprise, ...).
 
 Here is an example of a configuration using Consul:
 ```.bash
-
+terraform {
+  backend "consul" {
+    address = "demo.consul.io"
+    path    = "getting-started-RANDOMSTRING"
+    lock    = false
+  }
+}
 ```
 ---
 template: inverse
